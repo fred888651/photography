@@ -1,57 +1,58 @@
 <#
 .Synopsis
 
+   PowerShell function for parallel batch processing of JPG images, including optional luminance sharpening in CIE LAB color space and conversion to 2400×2400 square format.
+   
+   Designed for photography professionals, who batch process large image collections etc.
+
+   ImageMagick 16 bit required, static version recommended
+   Powershell 7.x required
+
+   Tested with 26155 x 39235 , 8688 × 5792 , 5792 x 8688 , 2400 x 1600 , 1600 x 2400, 1 x 2400 , 2400 x 1 , 12 x 12 pixels input JPG photos
+   (For some reason 1x1 and 2x2 pixels images do not work. This is not considered critical for this project.)
+   
+   Keeps original size for images < 2400 pixels longest side
+   For images > 2400 pixels longest side, they get scaled down.
+   Overwrite already existing output files. Input files are ofcourse only read, never changed.
+
+   Command lina arguments for:
+   
+   JPG quality, default 100%
+   
+   Number of CPU cores, default -2 cores
+   
+   Unsharp mask, with presets mild,normal,strong,veryStrong
+
+   ChangeFactor, how much shoud ImageMagick allocate for each file. 
+   5 mb file times factor 10 = 5*10 = 50 mb reserved for ImageMagick.
+   Default = 10
+   
+   Output folder, default is same as input folder
+   
+   (For some reason 1x1 and 2x2 pixels images do not work, but that is maybe not so useful anyway...)
+	
+   Checks free physical memory, crafts every worker thread specifically to actual file size, checks free disk space, checks CPU load, 
+   Writes warning if not satisfied, keeps running
+   
+   checks dependencies ImageMagick + powershell version + windows operating system
+   Throws error and stop if not satisfied 
+
+   Log file ends with a simple summary, number of files, sum of all files in MB, milliseconds for processing batch, MB/Sec and number of error/s.
+   Debug pipeline display ImageMagick arguments in detail, if activated. 
+   Advanced function with CmdLetBinding support, writes to verbose and debug pipeline.  
+   
+   Tested on windows 10 pro, windows server datacenter 2025
+   (Linux/Mac OS - just remove calling win32 classes for memory, disk, cpu check and it should work? Not tested)
+
+   TO-DO: Add two types of image stamps, graphical (PNG) and text string. Placed at image center bottom fifth. CmdLetBinding whatif support.
+	
+   License MIT 2.0
+   
    November 18, 2026
    Fredrik Hedlund
 
-   Convert JPG file to square 2400x2400 pixel image, with white borders, suitable for Instagram
-
-   Version 0.0.1
-
-   Runs asynchronous/parallel, powershell 7.x required
-   (processes MANY photos at the same time, great for large batches, ex photographers with many photos)
-
-   LAB color space or sRGB color space for sharpening. Default is LAB.
-
-   Does not have a GUI. This is a command line batch tool. Its very fast compares to GUI applications.
-
-   2400 pixels or more on longest side --> shrink to 2400 pixels
-   Smaller than 2400 pixels --> do nothing
-
-   ImageMagick 16 bit required, static version recommended
-
-   Tested with 26155 x 39235 , 8688 × 5792 , 5792 x 8688 , 2400 x 1600 , 1600 x 2400, 1 x 2400 , 2400 x 1 , 12 x 12 pixels input JPG photos
-   Works great, behaves as expected.
-
-   (For some reason 1x1 and 2x2 pixels images do not work, but that is maybe not so useful anyway...)
-
-   ImageMagick 7.1.2-35 Q16 x64 sometimes display warning then reading metadata (old DSLR? Canon Eos 5dmkII).
-   This warning is ignored.
-
-   Tested on windows 10 pro, windows server datacenter 2025
-   (Should work with some replacement of win32 classes for memory/disk/cpu check.)
-
-   PsScriptAnalyzer returns no error/warning
-
-   License MIT 2.0
-
 .DESCRIPTION
 
-   Can sharpen photo using unsharp mask in LAB and sRGB color space (default LAB color space)
-
-   JPG Quality can be set (default 100)
-
-   Number of threads can be set (default -2 threads)
-
-   Change factor can be set manually (default 10)
-   Depending on exact type of image encoder settings, a lot more ram memory is consumed by ImageMagick for each image,
-   A simple .TIFF with one high res image, and a few simple adjustment layers can grow 6-10 times
-   Also, compression of .TIFF affects how much ram each image need
-   Then a new image starts processing by ImageMagick, file size is multiplied with change factor in each thread
-
-   Installed 16 bit version of ImageMagick (static) recommended, async/parallel can sometimes run into issues with dynamic ImageMagick version
-
-   Runs in async/parallel mode, powershell 7.x required
 
 .EXAMPLE
 
@@ -67,8 +68,7 @@
 
 .OUTPUTS
 
-   Output square JPG images, sharpened, to default or specified output folder
-   Writes log file to same folder
+   JPG files + log file
 
    Example usage/output:
 
@@ -206,15 +206,6 @@ Transcript stopped, output file is C:\Test\Get-JpgSquareFromJpgParallel\Get-JpgS
 
 .NOTES
 
-   Use at your own risk...
-   With great power, comes great responsibility...
-   This tool is for advanced users.
-   You should be comfortable using command line tools/large batch jobs.
-   You should probably have at least a 8 core CPU and lots of memory.
-   (But works great on older CPUs with 4 cores and 16 GB memory).
-
-   GPU not required.
-
 .COMPONENT
 
 .ROLE
@@ -223,7 +214,7 @@ Transcript stopped, output file is C:\Test\Get-JpgSquareFromJpgParallel\Get-JpgS
 
 .FUNCTIONALITY
 
-   Convert JPG image to square format, suitable for Instagram
+   Convert JPG image/s to square format, suitable for Instagram
 
 #>
 Function Get-JpgSquareFromJpgParallel{
