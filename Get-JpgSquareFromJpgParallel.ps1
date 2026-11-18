@@ -5,7 +5,9 @@
    Fredrik Hedlund
 
    Convert JPG file to square 2400x2400 pixel image, with white borders, suitable for Instagram
-
+   
+   Designed for photographers who develops large number of files and miss parallel processing, and LAB sharpening, in Adobe Lightroom.
+   
    Runs asynchronous/parallel, powershell 7.x required
    (processes MANY photos at the same time, great for large batches, ex photographers with many photos)
 
