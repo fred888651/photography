@@ -88,7 +88,7 @@
    Convert JPG image to square format, suitable for Instagram
 
 #>
-Function Get-GetJpgSquareFromJpgParallel{
+Function Get-JpgSquareFromJpgParallel{
 
 	[CmdletBinding()]
 	[OutputType([String])]
