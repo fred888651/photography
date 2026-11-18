@@ -1,13 +1,11 @@
-﻿<#
+<#
 .Synopsis
 
    November 17, 2026
    Fredrik Hedlund
 
    Convert JPG file to square 2400x2400 pixel image, with white borders, suitable for Instagram
-   
-   Designed for photographers who develops large number of files and miss parallel processing, and LAB sharpening, in Adobe Lightroom.
-   
+
    Runs asynchronous/parallel, powershell 7.x required
    (processes MANY photos at the same time, great for large batches, ex photographers with many photos)
 
@@ -31,7 +29,9 @@
    Tested on windows 10 pro, windows server datacenter 2025
    Not tested on Linux/Apple. But should work? It has no fancy coding really.
 
-   License MIT 2.0 
+   PsScriptAnalyzer returns no error/warning
+
+   License MIT 2.0
 
 .DESCRIPTION
 
@@ -53,11 +53,11 @@
 
 .EXAMPLE
 
-   Get-GetJpgSquareFromJpgParallel -InputDir "C:\some dir with JPG files" -verbose
+   Get-JpgSquareFromJpgParallel -InputDir "C:\some dir with JPG files" -verbose
 
 .EXAMPLE
 
-   Get-GetJpgSquareFromJpgParallel -InputDir "C:\some dir with JPG files" SharpenInLABColorSpace:$false -ThrottleLimit 14 -SharpeningStrength VeryStrong -Quality 90 -Verbose
+   Get-JpgSquareFromJpgParallel -InputDir "C:\some dir with JPG files" SharpenInLABColorSpace:$false -ThrottleLimit 14 -SharpeningStrength VeryStrong -Quality 90 -Verbose
 
 .INPUTS
 
@@ -67,6 +67,54 @@
 
    Output square JPG images, sharpened, to default or specified output folder
    Writes log file to same folder
+
+   Example output (verbose pipeline)
+
+   Get-JpgSquareFromJpgParallel -InputDir C:\share -Verbose
+Transcript started, output file is C:\\Get-JpgSquareFromJpgParallel\Get-JpgSquareFromJpgParallel 2026-11-18_121113.txt
+2026-11-18T12:11:13.6113742-08:00 BLACK Get-JpgSquareFromJpgParallel Version: ImageMagick 7.1.2-35 Q16 x64 5d1bcc5:20261031 https://imagemagick.org Copyright: (C) 1999 ImageMagick Studio LLC License: https://imagemagick.org/license/ Features: Channel-masks(64-bit) Cipher DPC OpenCL OpenMP(2.0)  Delegates (built-in): bzlib cairo freetype gslib heic jng jp2 jpeg jxl lcms lqr lzma openexr pangocairo png ps raqm raw rsvg tiff webp xml zip zlib zstd Compiler: Visual Studio 2026 (195136260) .
+VERBOSE: Perform operation 'Enumerate CimInstances' with following parameters, ''className' = Win32_LogicalDisk,'namespaceName' = root\cimv2'.
+VERBOSE: Operation 'Enumerate CimInstances' complete.
+VERBOSE: Perform operation 'Enumerate CimInstances' with following parameters, ''className' = win32_operatingSystem,'namespaceName' = root\cimv2'.
+VERBOSE: Operation 'Enumerate CimInstances' complete.
+VERBOSE: 2026-11-18T12:11:13.6954147-08:00 BLACK Get-JpgSquareFromJpgParallel Sharpening strength 'Strong' --> Unsharp Mask '0x1.5+1.5+0.08' .
+VERBOSE: Sharpen with unsharp mask in LAB color space: 'True' .
+VERBOSE: 2026-11-18T12:11:13.6988269-08:00 BLACK Get-JpgSquareFromJpgParallel 'IMG_6211.jpg' '6.36170291900635' [mb] .
+VERBOSE: 2026-11-18T12:11:13.6994929-08:00 BLACK Get-JpgSquareFromJpgParallel 'IMG_6213.jpg' '6.33262825012207' [mb] .
+VERBOSE: 2026-11-18T12:11:13.7001009-08:00 BLACK Get-JpgSquareFromJpgParallel 'IMG_6221.jpg' '6.29126453399658' [mb] .
+VERBOSE: 2026-11-18T12:11:13.7007032-08:00 BLACK Get-JpgSquareFromJpgParallel 'IMG_6246.jpg' '5.57845687866211' [mb] .
+VERBOSE: 2026-11-18T12:11:13.7013009-08:00 BLACK Get-JpgSquareFromJpgParallel 'IMG_6260.jpg' '6.15327167510986' [mb] .
+VERBOSE: 2026-11-18T12:11:13.7019870-08:00 BLACK Get-JpgSquareFromJpgParallel 'IMG_6268.jpg' '6.34022331237793' [mb] .
+VERBOSE: 2026-11-18T12:11:13.7071304-08:00 BLACK Get-JpgSquareFromJpgParallel '1x2400.jpg' '0.00110054016113281' [mb] .
+VERBOSE: 2026-11-18T12:11:13.7079392-08:00 BLACK Get-JpgSquareFromJpgParallel '1x2400 - Copy.jpg' '0.00214481353759766' [mb] .
+VERBOSE: 2026-11-18T12:11:13.7085629-08:00 BLACK Get-JpgSquareFromJpgParallel 'Untitled.jpg' '0.00160408020019531' [mb] .
+VERBOSE: 2026-11-18T12:11:13.7092026-08:00 BLACK Get-JpgSquareFromJpgParallel 'Untitled - Copy.jpg' '0.00264835357666016' [mb] .
+VERBOSE: 2026-11-18T12:11:13.7098444-08:00 BLACK Get-JpgSquareFromJpgParallel '10' files in 'C:\share' == '37.1' [mb] .
+VERBOSE: Perform operation 'Enumerate CimInstances' with following parameters, ''className' = win32_processor,'namespaceName' = root\cimv2'.
+VERBOSE: Operation 'Enumerate CimInstances' complete.
+VERBOSE: 2026-11-18T12:11:14.7809339-08:00 BLACK Test-CpuLoadIsHigh Current Cpu Load '0' %
+VERBOSE: Perform operation 'Enumerate CimInstances' with following parameters, ''className' = win32_processor,'namespaceName' = root\cimv2'.
+VERBOSE: Operation 'Enumerate CimInstances' complete.
+VERBOSE: 2026-11-18T12:11:16.0228790-08:00 BLACK Test-CpuLoadIsHigh Current Cpu Load '1' %
+VERBOSE: Perform operation 'Enumerate CimInstances' with following parameters, ''className' = win32_processor,'namespaceName' = root\cimv2'.
+VERBOSE: Operation 'Enumerate CimInstances' complete.
+VERBOSE: 2026-11-18T12:11:17.3391108-08:00 BLACK Test-CpuLoadIsHigh Current Cpu Load '1' %
+VERBOSE: 2026-11-18T12:11:17.6390047-08:00 BLACK Test-CpuLoadIsHigh Cpu Load: 0.666666666666667
+VERBOSE: 2026-11-18T12:11:17.6401448-08:00 BLACK Get-JpgSquareFromJpgParallel Low cpu load .
+VERBOSE: 2026-11-18T12:11:17.6446532-08:00 BLACK Get-JpgSquareFromJpgParallel Parallel image processing start . . .
+WARNING: 2026-11-18T12:11:17.7968415-08:00 System.Net.IPHostEntry Get-JpgSquareFromJpgParallel File already exist and will be overwritten 'C:\\Get-JpgSquareFromJpgParallel\IMG_6211__CIE-1976-LAB-ColorSpace_SharpeningStrong_Q100.JPG' .
+WARNING: 2026-11-18T12:11:17.8215993-08:00 System.Net.IPHostEntry Get-JpgSquareFromJpgParallel File already exist and will be overwritten 'C:\\Get-JpgSquareFromJpgParallel\IMG_6213__CIE-1976-LAB-ColorSpace_SharpeningStrong_Q100.JPG' .
+WARNING: 2026-11-18T12:11:17.8365985-08:00 System.Net.IPHostEntry Get-JpgSquareFromJpgParallel File already exist and will be overwritten 'C:\\Get-JpgSquareFromJpgParallel\IMG_6221__CIE-1976-LAB-ColorSpace_SharpeningStrong_Q100.JPG' .
+WARNING: 2026-11-18T12:11:17.8489010-08:00 System.Net.IPHostEntry Get-JpgSquareFromJpgParallel File already exist and will be overwritten 'C:\\Get-JpgSquareFromJpgParallel\IMG_6246__CIE-1976-LAB-ColorSpace_SharpeningStrong_Q100.JPG' .
+WARNING: 2026-11-18T12:11:17.8560106-08:00 System.Net.IPHostEntry Get-JpgSquareFromJpgParallel File already exist and will be overwritten 'C:\\Get-JpgSquareFromJpgParallel\IMG_6260__CIE-1976-LAB-ColorSpace_SharpeningStrong_Q100.JPG' .
+WARNING: 2026-11-18T12:11:21.7629404-08:00 System.Net.IPHostEntry Get-JpgSquareFromJpgParallel File already exist and will be overwritten 'C:\\Get-JpgSquareFromJpgParallel\1x2400__CIE-1976-LAB-ColorSpace_SharpeningStrong_Q100.JPG' .
+WARNING: 2026-11-18T12:11:21.7821818-08:00 System.Net.IPHostEntry Get-JpgSquareFromJpgParallel File already exist and will be overwritten 'C:\\Get-JpgSquareFromJpgParallel\IMG_6268__CIE-1976-LAB-ColorSpace_SharpeningStrong_Q100.JPG' .
+WARNING: 2026-11-18T12:11:21.8706989-08:00 System.Net.IPHostEntry Get-JpgSquareFromJpgParallel File already exist and will be overwritten 'C:\\Get-JpgSquareFromJpgParallel\1x2400 - Copy__CIE-1976-LAB-ColorSpace_SharpeningStrong_Q100.JPG' .
+WARNING: 2026-11-18T12:11:21.9666168-08:00 System.Net.IPHostEntry Get-JpgSquareFromJpgParallel File already exist and will be overwritten 'C:\\Get-JpgSquareFromJpgParallel\Untitled__CIE-1976-LAB-ColorSpace_SharpeningStrong_Q100.JPG' .
+WARNING: 2026-11-18T12:11:22.0730283-08:00 System.Net.IPHostEntry Get-JpgSquareFromJpgParallel File already exist and will be overwritten 'C:\\Get-JpgSquareFromJpgParallel\Untitled - Copy__CIE-1976-LAB-ColorSpace_SharpeningStrong_Q100.JPG' .
+VERBOSE: 2026-11-18T12:11:23.4711868-08:00 BLACK Get-JpgSquareFromJpgParallel 'C:\share' --> 'C:\\Get-JpgSquareFromJpgParallel' .
+VERBOSE: 2026-11-18T12:11:23.4737057-08:00 BLACK Get-JpgSquareFromJpgParallel '10' files '37.1' [mb] processed in 5829.4869 [ms] @ '6.4' [mb/sec] with '0' error/s .
+Transcript stopped, output file is C:\Get-JpgSquareFromJpgParallel\Get-JpgSquareFromJpgParallel 2026-11-18_121113.txt
 
 .NOTES
 
@@ -160,14 +208,14 @@ Function Get-JpgSquareFromJpgParallel{
 
 			)
 
-		[System.Collections.ArrayList]$cpuLoad=@()
+			[System.Collections.ArrayList]$cpuLoad=@()
 
 			For($i=1 ; $i -le $samples; $i++)
 			{
 
 				Try{
 
-					$cpuLoad += (Get-CimInstance win32_processor).loadpercentage -ErrorAction Stop
+					$cpuLoad += (Get-CimInstance win32_processor -ErrorAction Stop).loadpercentage
 					Write-Verbose "$(Get-DateTimeFQDN) $($myInvocation.myCommand.name) Current Cpu Load '$($CpuLoad[-1])' %"
 					Start-Sleep -Milliseconds (Get-Random -min 50 -max 500)
 
@@ -180,7 +228,7 @@ Function Get-JpgSquareFromJpgParallel{
 
 			}
 
-			If( ($cpuLoad | Measure-Object -Average).average -ge $MaxCpuLoad )^
+			If( ($cpuLoad | Measure-Object -Average).average -ge $MaxCpuLoad )
 			{
 
 				Write-Warning "$(Get-DateTimeFQDN) $($myInvocation.myCommand.name) High Cpu Load: $($($cpuLoad | Measure-Object -Average).average)"
@@ -317,11 +365,26 @@ Function Get-JpgSquareFromJpgParallel{
 
         Write-Verbose "$(Get-DateTimeFQDN) $($myInvocation.myCommand.name) '$($files.count)' files in '$($inputDir)' == '$($sum_MB)' [mb] ."
 
-        $sw = [System.Diagnostics.Stopwatch]::StartNew()
-
         [string]$functionName = $myInvocation.myCommand.name
 
 		$fqdn = [System.Net.Dns]::GetHostByName($env:COMPUTERNAME) # handle psscriptanalyzer scope warning
+
+		if( (Test-CpuLoadIsHigh -MaxCpuLoad 50 -Samples 3) )
+		{
+
+			Write-Warning "$(Get-DateTimeFQDN) $($myInvocation.myCommand.name) High Cpu Load ."
+
+		}
+		else
+		{
+
+			Write-verbose "$(Get-DateTimeFQDN) $($myInvocation.myCommand.name) Low cpu load ."
+
+		}
+
+		$sw = [System.Diagnostics.Stopwatch]::StartNew()
+
+		Write-verbose "$(Get-DateTimeFQDN) $($myInvocation.myCommand.name) Parallel image processing start . . ."
 
         $log = $files | Sort-Object creationTime | ForEach-Object -Parallel{
 
